@@ -6,8 +6,9 @@ define([
 	'collections/todos',
 	'views/todos',
 	'text!templates/stats.html',
+	'text!templates/header.html',
 	'common'
-], function ($, _, Backbone, Todos, TodoView, statsTemplate, Common) {
+], function ($, _, Backbone, Todos, TodoView, statsTemplate, headerTemplate, Common) {
 	'use strict';
 
 	// Our overall **AppView** is the top-level piece of UI.
@@ -19,6 +20,8 @@ define([
 
 		// Compile our stats template
 		template: _.template(statsTemplate),
+
+		templateHeader: _.template(headerTemplate),
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events: {
@@ -33,6 +36,7 @@ define([
 		initialize: function () {
 			this.allCheckbox = this.$('#toggle-all')[0];
 			this.$input = this.$('#new-todo');
+			this.$header = this.$('#header');
 			this.$footer = this.$('#footer');
 			this.$main = this.$('#main');
 			this.$todoList = this.$('#todo-list');
@@ -51,6 +55,9 @@ define([
 		render: function () {
 			var completed = Todos.completed().length;
 			var remaining = Todos.remaining().length;
+			
+			this.$header.show();
+			this.$header.html(this.templateHeader());
 
 			if (Todos.length) {
 				this.$main.show();
